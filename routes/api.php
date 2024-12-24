@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\MembersController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -28,10 +29,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group (function () {
     Route::apiResource('tasks', TaskController::class);
     Route::apiResource('project', ProjectController::class);
-    Route::apiResource('project.members', MembersController::class);
-// ->only([
-//         'Index','Store','Delete'
-//      ]);
+    Route::apiResource('project.members', MembersController::class)
+->only([
+        'index','store','delete'
+     ]);
+
+Route::apiResource('project.comments', CommentController::class)
+->only([
+        'index','store'
+     ]);
+
+     Route::apiResource('tasks.comments', CommentController::class)
+->only([
+        'index','store'
+     ]);
 });
 
 
