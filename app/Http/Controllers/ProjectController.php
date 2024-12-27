@@ -15,8 +15,13 @@ class ProjectController extends Controller
 {
     //
 
-    public function __construct(){
-        $this->authorizeResource( Project::class, "projects");
+    // public function __construct(){
+    //     $this->authorizeResource( Project::class, "projects");
+    // }
+
+    public function __construct()
+    {
+        $this->authorizeResource(Project::class, 'project');
     }
 
     public function index(Request $request,Project $project){

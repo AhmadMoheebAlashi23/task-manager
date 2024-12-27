@@ -26,26 +26,43 @@ class TaskController extends Controller
 
         $tasks = QueryBuilder::for(Task::class)
         ->allowedFilters('is_done')
-        ->defaultSort('-created_at')
+        ->defaultSort('created_at')
         ->allowedSorts(['title','is_done','created_at'])
         ->paginate();
         return new TaskCollection($tasks);
     }
 
-    public function show(Request $request, Task $task)    {
-        return new TaskResource($task);
-    }
+    public function show(Request $request, Task $task): TaskResource    {
 
-    public function store(StoreTaskeRequest $request){
-        $validate=$request->validated();
-
-        $task=Auth::user()->tasks()->create($validate);
+        // dd($task);
         return new TaskResource($task);
 
     }
+
+    // public function store(StoreTaskeRequest $request):TaskResource{
+    //     $validate=$request->validated();
+    //     $task=Task::create($validate);
+    //     return new TaskResource($task);
+
+    // }
+
+    public function store(StoreTaskeRequest $request): TaskResource
+{
+    $validate = $request->validated();
+
+    // إضافة الحقل creator_id
+    $validate['creator_id'] = auth()->id(); // مثال: استخدام المعرّف الخاص بالمستخدم الحالي
+
+    $task = Task::create($validate);
+    return new TaskResource($task);
+}
 
     public function update(UpdateTaskeRequest $request,Task $task){
-        $validated=$request->validated();
+        // if (!Auth::check()) {
+        //     abort(403, 'Unauthorized action.');
+        // }
+
+        $validated=$request->validated();   
 
         $task->update($validated);
         return new TaskResource($task);

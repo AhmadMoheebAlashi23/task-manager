@@ -58,7 +58,6 @@ class ProjectPolicy
      */
     public function update(User $user, Project $project): bool
     {
-        //
         return $user->id === $project->creator_id;
     }
 
@@ -71,7 +70,6 @@ class ProjectPolicy
      */
     public function delete(User $user, Project $project): bool
     {
-        //
         return $user->id === $project->creator_id;
     }
 

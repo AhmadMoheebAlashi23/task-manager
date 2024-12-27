@@ -33,9 +33,19 @@ class TaskPolicy
     public function view(User $user, Task $task)
     {
         //
-        if($user->id === $task->creator_id){
 
-        }if($task->project && $user->memberships()->contains($task->project)){
+        // dd($task->project);
+
+        // dd($user->memberships()->contains($task->project));
+
+        // dd($user->id === $task->creator_id);
+
+        if($user->id === $task->creator_id){
+            return true;
+        }
+
+
+        if($task->project && $user->memberships->contains($task->project)){
             return true;
         }
         // return $user->memberships->contains($task);
@@ -63,9 +73,11 @@ class TaskPolicy
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Task $task)
+    public function update(User $user, Task $task): bool
     {
         //
+        // dd($user->id === $task->creator_id);
+
         return $user->id === $task->creator_id;
 
     }
@@ -80,7 +92,7 @@ class TaskPolicy
     public function delete(User $user, Task $task)
     {
         //
-        return $user->id === $task->user_id;
+        return $user->id === $task->creator_id;
 
     }
 

@@ -13,27 +13,31 @@ class UpdateTaskeRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
-        return true;
+    public function authorize(): bool{
+
+    $task = $this->route('task');
+    // dd(  $task->creator_id , Auth::id());
+    return Auth::check() && $task && $task->creator_id === Auth::id();
     }
+
 
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules():array
     {
         return [
-            //
-            'title'=> 'sometimes|required|max:255',
-            'is_done' =>'sometimes|boolean',
-            'project_id'=>[
-                'nullable',
-                Rule::exists('project_id','id')->where(function($query) {
-                    $query->where('creator_id',Auth::id());
-                })]
+            'title' => 'sometimes|required|max:255',
+            'is_done' => 'sometimes|boolean',
+            'scheduled_at' => 'sometimes|nullable|date',
+            'due_at' => 'sometimes|nullable|date',
+            'project_id' => [
+            'nullable',
+             Auth::check() ? Rule::in(Auth::user()->memberships->pluck('id')) : 'nullable',
+            ],
+
         ];
     }
 }

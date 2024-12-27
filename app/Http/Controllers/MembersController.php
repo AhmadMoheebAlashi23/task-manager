@@ -14,21 +14,42 @@ class MembersController extends Controller
     return new UserCollection($members);
     }
 
-    public function store(Request $request,Project $project){
+    // public function store(Request $request,Project $project){
+    //     $request->validate([
+    //         'user_id'=>'required|exists:users,id',
+    //         // 'project_id'=>'required|exists:users,id'
+    //     ]);
+
+    //     $project->members()->syncWithoutDetaching([$request->user()->id]); ///// error
+    //     $members=$project->members(); ///errorr
+    //     return new UserCollection($members);
+    // }
+
+    public function store(Request $request, Project $project)
+    {
         $request->validate([
-            'user_id'=>'required|exists:users,id',
-            // 'project_id'=>'required|exists:users,id'
+            'user_id' => 'required|exists:users,id',
         ]);
 
-        $project->members()->syncWithoutDetaching([$request->user()->id]);
-        $members=$project->members();
+        $project->members()->syncWithoutDetaching([$request->user_id]);
+
+        $members = $project->members;
+
         return new UserCollection($members);
     }
 
-    public function destroy(Request $request,Project $project,int $member ){
-        abort_if($project->creator_id === $member ,400,'Cant remove creator from project !!');
+
+
+
+
+    public function destroy(Request $request, Project $project, int $member)
+    {
+        abort_if($project->creator_id === $member, 400, 'Cannot remove creator from project.');
+
         $project->members()->detach([$member]);
-        $member=$project->members;
-        return new UserCollection($member);
+
+        $members = $project->members;
+
+        return new UserCollection($members);
     }
 }

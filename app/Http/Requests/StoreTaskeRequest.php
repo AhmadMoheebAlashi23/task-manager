@@ -13,7 +13,7 @@ class StoreTaskeRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize():bool
     {
         return true;
     }
@@ -26,11 +26,12 @@ class StoreTaskeRequest extends FormRequest
     public function rules():array
     {
         return [
-            //
-            'title'=> 'required|max:255',
-            'project_id'=>[
-            'nullable',
-            Rule::in(Auth::user()->membershaps->pluck('id'))
+            'title' => 'required|max:255',
+            'scheduled_at' => 'nullable|date',
+            'due_at' => 'nullable|date',
+            'project_id' => [
+                'nullable',
+                Rule::in(Auth::user()->memberships->pluck('id')),
             ],
         ];
     }

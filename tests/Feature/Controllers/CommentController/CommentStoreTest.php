@@ -28,6 +28,7 @@ class CommentStoreTest extends TestCase
     {
         $project = Project::factory()->create();
         Sanctum::actingAs($project->creator);
+
         $route = route('projects.comments.store', $project);
         $response = $this->postJson($route, [
             'content' => 'bar',
